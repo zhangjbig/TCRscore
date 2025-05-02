@@ -1,6 +1,9 @@
 # TCRscore
 ##### TCRscore is a deep learning-based model to predict the immunogenicity of neoantigen peptides by integrating the intrinsic features of TCRs, neoantigen peptides, HLA class I molecules, and the HLA evolutionary divergence metric (HED). The TCRscore model comprises five modules: the protein sequence coding, TCR representation, pMHC feature extraction, TCR–pMHC, and HED modules. The protein sequence coding module numerically encoded HLA sequences, peptide sequences, and TCR CDR3 regions using amino acid Z-descriptors. Considering that the fourth and fifth descriptors are not clearly derivable, we utilized the first three Z-descriptors, which correspond to lipophilicity (z1 or A), volume (z2 or B), and polarity (z3 or C). 
 
+## Download and decompress TCRscore.rar in the local directory of your computer.
+##### unrar x TCRscore.rar
+
 ## I. Environmental installation
 ### Method 1：  
 #### Install Anaconda and Create a conda virtual environment
