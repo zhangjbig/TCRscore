@@ -1,8 +1,6 @@
 # TCRscore
 ##### TCRscore is a deep learning-based model to predict the immunogenicity of neoantigen peptides by integrating the intrinsic features of TCRs, neoantigen peptides, HLA class I molecules, and the HLA evolutionary divergence metric (HED). The TCRscore model comprises five modules: the protein sequence coding, TCR representation, pMHC feature extraction, TCR–pMHC, and HED modules. The protein sequence coding module numerically encoded HLA sequences, peptide sequences, and TCR CDR3 regions using amino acid Z-descriptors. Considering that the fourth and fifth descriptors are not clearly derivable, we utilized the first three Z-descriptors, which correspond to lipophilicity (z1 or A), volume (z2 or B), and polarity (z3 or C). 
 
-## Download and decompress TCRscore.rar in the local directory of your computer.
-##### unrar x TCRscore.rar
 
 ## I. Environmental installation
 ### Method 1：  
@@ -32,6 +30,8 @@
 ##### conda install scipy=1.7.3
 ##### conda install imbalanced-learn=0.9.0
 ##### conda install matplotlib
+##### conda install biopython
+
 
 
 ### Method 2：  
@@ -42,43 +42,33 @@
 ##### pip install scikit-learn==1.0.2
 ##### pip install scipy==1.7.3
 ##### pip install imbalanced-learn
+##### pip install biopython
+
+
+
+
+
+
 
 ## II. Code running
 ### Step1: Setting the path
 ###### cd E:\TCRscore\TCRscore   
 
-### Step2: predictTCRratio.py
-#### Function: A Python script for predicting TCR ratios for antigen-HLA combinations.
-#### This tool predicts TCR ratios using pre-trained encoders for TCR and pMHC, along with a trained classifier model. It takes input data containing TCR, HLA, and antigen information, and outputs prediction results.
-##### Usage: python predictTCRratio.py -i <input> -tcr <tcr_encoder> -pmhc <pmhc_encoder> -model <model> -o <output>
+
+### Step2: predictTCRscore.py
+#### Function: A Python script for predicting TCR score for antigen-HLA combinations.
+#### This tool predicts TCR score using pre-trained encoders for TCR and pMHC, along with a trained classifier model. It takes input data containing TCR, HLA, and antigen information, and outputs prediction results.
+##### Usage:  python predictTCRscore.py -i <input> -ihla <input2> -o <output> [options]
 #### Parameters:
-##### -i: Path to input CSV file(required columns: hla, antigen, sample, optional:tcr).
-##### -tcr: Path to the pre-trained TCR encoder (default:./Model/tcr_encoder.h5).
-##### -pmhc:Path to the pre-trained pMHC encoder (default:./Model/hla_encoder.h5).
-##### -model:Path to the trained classifier model (default:./Model/model.h5).
-##### -o:Output directory to save prediction results (default:./output1/pmhc_counts.csv).
-##### Example:  python predictTCRratio.py -i data_test.csv -o output1
+##### -i, --inputdata, Specify the csv file with standard format you want to predict. (required columns: hla, antigen, sample, optional: tcr).
+##### -ihla, --inputdatahla, Sample HLA file with standard format you want to predict.(txt file,columns: Sample,A1,A2,B1,B2,C1,C2)
+##### -o, --output, help=The output folder.
+##### -tcr, --tcr_encoder, Path to the pre-trained TCR encoder (default:./Model/tcr_encoder.h5).
+##### -pmhc,--pmhc_encoder, Path to the pre-trained pMHC encoder (default:./Model/hla_encoder.h5).
+##### -model,--model,Path to the trained classifier model.(default='./Model/model.h5')
+##### -tcrseq, --tcr_allseq, default='./tcr_data/tcr.csv', help=all tcr sequence csv.
+##### -tcrfea, --tcr_allseqfea, default='./tcr_data/tcr.npy', help=all tcr sequence features npy.
+##### -hlahed_d,--hlahed_d, grantham_matrix file Path for HLA Hed.(default: ./hlahed/grantham_matrix.txt)
+##### -hlahed_f,--hlahed_f, HLA protein_fasta Path for HLA Hed.(default: ./hlahed/ABC_prot.fa)
 
-
-### Step3:predict_hlahed.py
-#### Function: A Python script for predicting HLA epitope dissimilarity using Grantham matrix and protein sequences.
-##### Usage: python predict_hlahed.py -d <grantham_matrix> -f <protein_fasta> -i <input> -o <output>
-#### Parameters:
-##### -d, --grantham_matrix file Path (default: ./hlahed/grantham_matrix.txt)
-##### -f, --HLA protein_fasta	Path (default: ./hlahed/ABC_prot.fa)
-##### -i, --input Path to input file
-##### -o, --output Path to output file for prediction results (default:./output1/testResult.txt)
-##### Example:  python predict_hlahed.py -d ./hlahed/grantham_matrix.txt -f ./hlahed/ABC_prot.fa -i test.txt -o ./output1/testResult.txt
-
-### Step4:predict_TCRscore.py
-#### Function:A Python script that combines TCRratio and HLA epitope dissimilarity (HLAHED) predictions to calculate comprehensive TCR scores.
-##### Usage:  python predictTCRscore.py -i <input> -o <output> [options]
-#### Parameters:
-##### -i, --input	   Path to input CSV file (same format as TCRratio)
-##### -o, --output  Output directory for results(default: processed_data.csv)
-#### Options
-##### -tcr , --tcrratio	: Path to TCRratio predictions (default:"./output1/pmhc_counts.csv")
-##### -hed, --hlahed	Path to HLAHED predictions (default: "./output1/testResult.txt")
-##### Example: python predictTCRscore.py -i data_test.csv -o output1
-
-
+##### Example:  python predictTCRscore.py -i data_test.csv -ihla Sample_HLA.txt -o output
